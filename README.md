@@ -97,7 +97,7 @@ Ring sizes and scoring rules come from the PC app's target definitions
 (`Software/C#/freETarget/targets/*.cs`). More faces can be added to `TARGETS[]`
 in `main/targets.c`.
 
-## Accuracy: matches the freETarget PC app
+## Accuracy: Same formulas as the original freETarget PC app
 
 Shot placement and scoring follow the PC app's code:
 
