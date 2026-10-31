@@ -1,0 +1,25 @@
+idf_component_register(
+    SRCS
+        "app_main.c"
+        "lcd.c"
+        "model.c"
+        "net.c"
+        "parse.c"
+        "sd.c"
+        "targets.c"
+        "ui.c"
+    INCLUDE_DIRS
+        "."
+    REQUIRES
+        esp_driver_gpio
+        esp_driver_sdspi
+        esp_driver_spi
+        fatfs
+        sdmmc
+        esp_event
+        esp_netif
+        esp_timer
+        esp_wifi
+        lwip
+        nvs_flash
+)
