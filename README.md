@@ -197,15 +197,32 @@ panel washed-out grey.
 
 ## Build and flash
 
-I used [PlatformIO](https://platformio.org/) (ESP-IDF framework, platform
-`espressif32`).
+The firmware is written for [ESP-IDF](https://docs.espressif.com/projects/esp-idf/),
+Espressif's own framework (tested with ESP-IDF 6.1). PlatformIO is only a
+convenient way to run the ESP-IDF build; the code does not depend on it.
+
+### PlatformIO (tested)
 
     pio run -e cyd                                    # build
     pio run -e cyd -t upload --upload-port <port>     # flash
     pio device monitor                                # serial log
 
+### Plain ESP-IDF (not yet tested)
+
+The repo has the standard ESP-IDF project files (`CMakeLists.txt`,
+`main/CMakeLists.txt`, `sdkconfig.defaults`, `partitions.csv`), so with
+ESP-IDF installed this should work:
+
+    idf.py set-target esp32
+    idf.py build
+    idf.py -p <port> flash monitor
+
 `<port>` is the board's USB serial port, for example `/dev/ttyUSB0` on Linux,
 `/dev/cu.usbserial-XXXX` on macOS or `COM3` on Windows.
+
+**Python version:** the ESP-IDF build tools run on Python. Use a version
+ESP-IDF supports (3.12 works). Very new Python releases can fail to install
+the build tools until their dependencies catch up.
 
 ## Code layout
 
@@ -222,12 +239,31 @@ I used [PlatformIO](https://platformio.org/) (ESP-IDF framework, platform
 ## Status
 
 Tested on hardware: display, automatic WiFi connection, live shots and
-scoring (50 m rifle). Built but not yet tested on hardware: face selection
-and the microSD log.
+scoring (50 m rifle), and switching target faces with the BOOT button.
 
 Not implemented: touch screen (the CYD's touch panel is unused), and
 changing target settings from the CYD. The target does accept settings
 commands over this same WiFi link, so that is possible later.
+
+## TODO
+
+- **PC-app settings on the display:** choose distance %, calibration, bullet
+  size and decimal scoring from the CYD instead of editing `main/config.h`.
+- **Shot times on the SD log:** read timing data from the PC and save it to
+  the microSD log (the board has no clock).
+- **Other display devices:** support more hardware, keeping the display well
+  under $50. Above that, consider low-cost Android tablets.
+- **Touch screen:** use the CYD's touch panel.
+- **Change target settings from the CYD:** the target accepts settings
+  commands over the same WiFi link.
+- **Plain ESP-IDF build:** confirm the `idf.py` steps above work without
+  PlatformIO.
+- **Arduino build:** let people build with the Arduino IDE / Arduino ESP32
+  core. The code uses ESP-IDF functions that the Arduino ESP32 core also
+  includes, so most of it should carry over. Needs a small `.ino` sketch that
+  starts the existing code from `setup()` (instead of ESP-IDF's `app_main`),
+  the source files arranged the way the Arduino IDE expects, and the board set
+  to a 2 MB flash layout using `partitions.csv`.
 
 ## Credits
 
